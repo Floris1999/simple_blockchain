@@ -223,7 +223,13 @@ def new_transaction():
     # Create a new Transaction
     index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
 
-    response = {'message': f'Transaction will be added to Block {index}'}
+    response = {
+        'message': f'Transaction will be added to Block {index}',
+        'chain': blockchain.current_transactions,
+        'wallet': blockchain.wallet,
+        'length': len(blockchain.current_transactions),
+    }
+    
     return jsonify(response), 201
 
 @app.route('/wallet/new', methods=['POST'])
@@ -249,7 +255,10 @@ def new_user():
     # Create a new Transaction
     index = blockchain.new_user(values['name'], values['address'])
 
-    response = {'message': f'User will be added to wallet {index}'}
+    response = {
+        'wallet': blockchain.wallet,
+        'length': len(blockchain.wallet),
+    }
     return jsonify(response), 201
 
 
@@ -264,8 +273,8 @@ def full_chain():
 @app.route('/transaction', methods=['GET'])
 def full_transaction():
     response = {
-        'chain': blockchain.transaction,
-        'length': len(blockchain.chain),
+        'chain': blockchain.current_transactions,
+        'length': len(blockchain.current_transactions),
     }
     return jsonify(response), 200
 
